@@ -13,7 +13,7 @@ The tool generates three diffrent files. Two of them are CSV files and keep a TL
 - 400 (Engine state is changed from None to Available)
 - 403 (Engine state is changed from Available to Stopped)
 
-Inside the third file, you can find all processes which were matched (script execution was matched to the script termination):
+Inside the third file, you can find all processes which were matched (the script execution was matched to the script termination):
 
 ![alt text](https://github.com/gajos112/PowerShell-Timeliner/blob/main/images/15.PNG?raw=true)
 
