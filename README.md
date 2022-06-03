@@ -37,7 +37,7 @@ Then it takes that two files and gathers basic information about script executio
 
 To get more information about a script execution you are interted in, you can click on the row containg that execution and the tool will display all extracted information: 
 
-![alt text](https://github.com/gajos112/PowerShell-Timeliner/blob/main/images/7.PNG?raw=true)
+![alt text](https://github.com/gajos112/PowerShell-Timeliner/blob/main/images/7_1.PNG?raw=true)
 
 In addition to that, I implemented a small logging panel, which tells you how many entries were added to the timeline and where the output was saved to.
 
