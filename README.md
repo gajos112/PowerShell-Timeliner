@@ -8,5 +8,9 @@ t is a GUI tool written in PowerShell. In order to parse Windows Event Logs it u
 
 The tool generates three diffrent files. Two of them are CSV files, and keeps a TLN format timeline for two events:
 
-- 400
-- 403
+- 400 (Engine state is changed from None to Available)
+- 403 (Engine state is changed from Available to Stopped)
+
+The third file is created for scripts executions, that the tool was able to calcualted the duration. 
+
+![alt text](https://github.com/gajos112/PowerShell-Timeliner/blob/main/images/14.PNG?raw=true)
