@@ -45,7 +45,7 @@ In addition to that, I implemented a small logging panel, which tells you how ma
 
 ![alt text](https://github.com/gajos112/PowerShell-Timeliner/blob/main/images/13.PNG?raw=true)
 
-If you have many PowerShell script executions, you can search for a specififc path using a SEARCH box. 
+If you have many PowerShell script executions, you can search for a specific path using a SEARCH box:
 
 ![alt text](https://github.com/gajos112/PowerShell-Timeliner/blob/main/images/8.PNG?raw=true)
 
