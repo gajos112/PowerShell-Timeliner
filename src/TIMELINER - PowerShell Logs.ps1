@@ -70,178 +70,183 @@ function gridClick(){
 
 function Parse{
     try{
+        if (Test-Path -path $cmd){
+            $Event_log_file_Directory = $TextBox_Input.Text
+            $Output_Directory = $TextBox_Output.Text
+
+            $Event_log_file = [System.String]::Concat($Event_log_file_Directory,"\Windows PowerShell.evtx")
+            $LogPath = [System.String]::Concat($Output_Directory,"\PowerShellLogs.txt")
+
+            $TextBox_Logs.AppendText("Input: $Event_log_file`r`n")
+            $TextBox_Logs.AppendText("Output: $Output_Directory`r`n`r`n")
+
+            if (Test-Path $Event_log_file){
+                ### 403 ###
+
+                $TextBox_Logs.AppendText("Parsing PowerShell.evtx: (ID 403) using 'logParser.exe'...`r`n")
         
-        $Event_log_file_Directory = $TextBox_Input.Text
-        $Output_Directory = $TextBox_Output.Text
-
-        $Event_log_file = [System.String]::Concat($Event_log_file_Directory,"\Windows PowerShell.evtx")
-        $LogPath = [System.String]::Concat($Output_Directory,"\PowerShellLogs.txt")
-
-        $TextBox_Logs.AppendText("Input: $Event_log_file`r`n")
-        $TextBox_Logs.AppendText("Output: $Output_Directory`r`n`r`n")
-
-        if (Test-Path $Event_log_file){
-            ### 403 ###
-
-            $TextBox_Logs.AppendText("Parsing PowerShell.evtx: (ID 403) using 'logParser.exe'...`r`n")
-        
-            $OutputPathFileTmp = [System.String]::Concat($Output_Directory,"\Timeline_WinEvt_Powershell_403.tmp")
-            $OutputPathFile = [System.String]::Concat($Output_Directory,"\Timeline_WinEvt_Powershell_403.csv")
+                $OutputPathFileTmp = [System.String]::Concat($Output_Directory,"\Timeline_WinEvt_Powershell_403.tmp")
+                $OutputPathFile = [System.String]::Concat($Output_Directory,"\Timeline_WinEvt_Powershell_403.csv")
             
-            if(Test-Path $OutputPathFile)
-            {
-                Remove-Item -Path $OutputPathFile
-                $TextBox_Logs.AppendText("The old timeline $OutputPathFile was deleted.`r`n")
-            }
-
-            "Date,Event" | Out-File $OutputPathFileTmp
-        
-            $command_Processes_Created_Select="Select TimeGenerated AS Date,',',message FROM "
-            $command_Processes_Created_Where=" WHERE EventID = 403"
-            $command_Processes_Created=[System.String]::Concat($command_Processes_Created_Select,"'",$Event_log_file,"'",$command_Processes_Created_Where)
-            & $cmd -stats:OFF -i:EVT -q:ON -resolveSIDs:ON $command_Processes_Created  | out-File $OutputPathFileTmp -Append
-
-            $RunspaceId403 = @()
-
-            $CSV = Import-Csv $OutputPathFileTmp
-            $CSV | ForEach-Object {
-
-                $NewRow = [System.String]::Concat(([DateTime]$_.Date).ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss"),",EVTX - PowerShell - 403,,", $_.Event.Trim());
-                $Time = ([DateTime]$_.Date).ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss")
-
-                $pattern = "HostApplication=(.*) EngineVersion.* RunspaceId=(.*) PipelineId="
-                $matchcheck = $NewRow -match $pattern
-                if ($matchcheck){
-                     $ScriptName = $matches[1]
-                     $ScriptRunspaceId = $matches[2]
-                     $RunspaceId403 += [PSCustomObject]@{Date = $Time; Script = $ScriptName;  ID = $ScriptRunspaceId} 
-                 }
-
-                 Add-Content -Path $OutputPathFile -Value $NewRow
-            }
-
-            if(Test-Path $OutputPathFile)
-            {
-                $TextBox_Logs.AppendText("Timeline for events ID 403 was saved to: $OutputPathFile`r`n")
-                GetTimelineLenght($OutputPathFile)
-            }
-
-            Remove-Item -Path $OutputPathFileTmp
-
-            ### 400 ###
-
-            $TextBox_Logs.AppendText("`r`nParsing PowerShell.evtx: (ID 400) using 'logParser.exe'...`r`n")
-        
-            $OutputPathFileTmp = [System.String]::Concat($Output_Directory,"\Timeline_WinEvt_Powershell_400.tmp")
-            $OutputPathFile = [System.String]::Concat($Output_Directory,"\Timeline_WinEvt_Powershell_400.csv")
-            
-            if(Test-Path $OutputPathFile)
-            {
-                Remove-Item -Path $OutputPathFile
-                $TextBox_Logs.AppendText("The old timeline $OutputPathFile was deleted.`r`n")
-            }
-
-            "Date,Event" | Out-File $OutputPathFileTmp
-        
-            $command_Processes_Created_Select="Select TimeGenerated AS Date,',',message FROM "
-            $command_Processes_Created_Where=" WHERE EventID = 400"
-            $command_Processes_Created=[System.String]::Concat($command_Processes_Created_Select,"'",$Event_log_file,"'",$command_Processes_Created_Where)
-            & $cmd -stats:OFF -i:EVT -q:ON -resolveSIDs:ON $command_Processes_Created  | out-File $OutputPathFileTmp -Append
-
-            $RunspaceId400 = @()
-
-            $CSV = Import-Csv $OutputPathFileTmp
-            $CSV | ForEach-Object {
-
-                $NewRow = [System.String]::Concat(([DateTime]$_.Date).ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss"),",EVTX - PowerShell - 400,,", $_.Event.Trim());
-                $Time = ([DateTime]$_.Date).ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss")
-
-                $pattern = "HostApplication=(.*) EngineVersion.* RunspaceId=(.*) PipelineId="
-                $matchcheck = $NewRow -match $pattern
-                if ($matchcheck){
-                     $ScriptName = $matches[1]
-                     $ScriptRunspaceId = $matches[2]
-                     $RunspaceId400 += [PSCustomObject]@{Date = $Time; Script = $ScriptName;  ID = $ScriptRunspaceId} 
-                 }
-                 Add-Content -Path $OutputPathFile -Value $NewRow
-            }
-
-            if(Test-Path $OutputPathFile){
-                $TextBox_Logs.AppendText("Timeline for events ID 400 was saved to: $OutputPathFile`r`n")
-                GetTimelineLenght($OutputPathFile)
-            }
-
-            Remove-Item -Path $OutputPathFileTmp
-
-            ### ANALYSIS ###
-            $TextBox_Logs.AppendText("`r`nAnalyzing all logs...")
-
-            $DataGridView_Logs.Enabled = $true
-            $DataGridView_Logs.rows.clear()
-            
-            $check = 0
-            $counter = 0
-            $counter2 = 0
-            foreach($itemin400 in $RunspaceId400)
+                if(Test-Path $OutputPathFile)
                 {
-                    $check = 0
-                    foreach($itemin403 in $RunspaceId403)
-                        {
+                    Remove-Item -Path $OutputPathFile
+                    $TextBox_Logs.AppendText("The old timeline $OutputPathFile was deleted.`r`n")
+                }
+
+                "Date,Event" | Out-File $OutputPathFileTmp
+        
+                $command_Processes_Created_Select="Select TimeGenerated AS Date,',',message FROM "
+                $command_Processes_Created_Where=" WHERE EventID = 403"
+                $command_Processes_Created=[System.String]::Concat($command_Processes_Created_Select,"'",$Event_log_file,"'",$command_Processes_Created_Where)
+                & $cmd -stats:OFF -i:EVT -q:ON -resolveSIDs:ON $command_Processes_Created  | out-File $OutputPathFileTmp -Append
+
+                $RunspaceId403 = @()
+
+                $CSV = Import-Csv $OutputPathFileTmp
+                $CSV | ForEach-Object {
+
+                    $NewRow = [System.String]::Concat(([DateTime]$_.Date).ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss"),",EVTX - PowerShell - 403,,", $_.Event.Trim());
+                    $Time = ([DateTime]$_.Date).ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss")
+
+                    $pattern = "HostApplication=(.*) EngineVersion.* RunspaceId=(.*) PipelineId="
+                    $matchcheck = $NewRow -match $pattern
+                    if ($matchcheck){
+                         $ScriptName = $matches[1]
+                         $ScriptRunspaceId = $matches[2]
+                         $RunspaceId403 += [PSCustomObject]@{Date = $Time; Script = $ScriptName;  ID = $ScriptRunspaceId} 
+                     }
+
+                     Add-Content -Path $OutputPathFile -Value $NewRow
+                }
+
+                if(Test-Path $OutputPathFile)
+                {
+                    $TextBox_Logs.AppendText("Timeline for events ID 403 was saved to: $OutputPathFile`r`n")
+                    GetTimelineLenght($OutputPathFile)
+                }
+
+                Remove-Item -Path $OutputPathFileTmp
+
+                ### 400 ###
+
+                $TextBox_Logs.AppendText("`r`nParsing PowerShell.evtx: (ID 400) using 'logParser.exe'...`r`n")
+        
+                $OutputPathFileTmp = [System.String]::Concat($Output_Directory,"\Timeline_WinEvt_Powershell_400.tmp")
+                $OutputPathFile = [System.String]::Concat($Output_Directory,"\Timeline_WinEvt_Powershell_400.csv")
+            
+                if(Test-Path $OutputPathFile)
+                {
+                    Remove-Item -Path $OutputPathFile
+                    $TextBox_Logs.AppendText("The old timeline $OutputPathFile was deleted.`r`n")
+                }
+
+                "Date,Event" | Out-File $OutputPathFileTmp
+        
+                $command_Processes_Created_Select="Select TimeGenerated AS Date,',',message FROM "
+                $command_Processes_Created_Where=" WHERE EventID = 400"
+                $command_Processes_Created=[System.String]::Concat($command_Processes_Created_Select,"'",$Event_log_file,"'",$command_Processes_Created_Where)
+                & $cmd -stats:OFF -i:EVT -q:ON -resolveSIDs:ON $command_Processes_Created  | out-File $OutputPathFileTmp -Append
+
+                $RunspaceId400 = @()
+
+                $CSV = Import-Csv $OutputPathFileTmp
+                $CSV | ForEach-Object {
+
+                    $NewRow = [System.String]::Concat(([DateTime]$_.Date).ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss"),",EVTX - PowerShell - 400,,", $_.Event.Trim());
+                    $Time = ([DateTime]$_.Date).ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss")
+
+                    $pattern = "HostApplication=(.*) EngineVersion.* RunspaceId=(.*) PipelineId="
+                    $matchcheck = $NewRow -match $pattern
+                    if ($matchcheck){
+                         $ScriptName = $matches[1]
+                         $ScriptRunspaceId = $matches[2]
+                         $RunspaceId400 += [PSCustomObject]@{Date = $Time; Script = $ScriptName;  ID = $ScriptRunspaceId} 
+                     }
+                     Add-Content -Path $OutputPathFile -Value $NewRow
+                }
+
+                if(Test-Path $OutputPathFile){
+                    $TextBox_Logs.AppendText("Timeline for events ID 400 was saved to: $OutputPathFile`r`n")
+                    GetTimelineLenght($OutputPathFile)
+                }
+
+                Remove-Item -Path $OutputPathFileTmp
+
+                ### ANALYSIS ###
+                $TextBox_Logs.AppendText("`r`nAnalyzing all logs...")
+
+                $DataGridView_Logs.Enabled = $true
+                $DataGridView_Logs.rows.clear()
+            
+                $check = 0
+                $counter = 0
+                $counter2 = 0
+                foreach($itemin400 in $RunspaceId400)
+                    {
+                        $check = 0
+                        foreach($itemin403 in $RunspaceId403)
+                            {
                         
-                            if(($itemin403.ID -eq $itemin400.ID) -And ($itemin403.Script -eq $itemin400.Script)){
+                                if(($itemin403.ID -eq $itemin400.ID) -And ($itemin403.Script -eq $itemin400.Script)){
 
-                                $StartDate = [DateTime] $itemin400.Date
-                                $EndDate = [DateTime] $itemin403.Date
-                                $Duration = NEW-TIMESPAN –Start $StartDate –End $EndDate
+                                    $StartDate = [DateTime] $itemin400.Date
+                                    $EndDate = [DateTime] $itemin403.Date
+                                    $Duration = NEW-TIMESPAN –Start $StartDate –End $EndDate
                             
-                                $msg1 = [System.String]::Concat("Script Runspace Id: ", $itemin403.ID)
-                                $msg2 = [System.String]::Concat("Script started on: ", $itemin400.Date)
-                                $msg3 = [System.String]::Concat("Script ended on: ", $itemin403.Date)
-                                $msg4 = [System.String]::Concat("Duration: ", $Duration.Hours, " hours ", $Duration.Minutes, " minutes ", $Duration.Seconds, " seconds")
-                                $msg5 = [System.String]::Concat("Script path: ", $itemin403.Script,"`r`n")
+                                    $msg1 = [System.String]::Concat("Script Runspace Id: ", $itemin403.ID)
+                                    $msg2 = [System.String]::Concat("Script started on: ", $itemin400.Date)
+                                    $msg3 = [System.String]::Concat("Script ended on: ", $itemin403.Date)
+                                    $msg4 = [System.String]::Concat("Duration: ", $Duration.Hours, " hours ", $Duration.Minutes, " minutes ", $Duration.Seconds, " seconds")
+                                    $msg5 = [System.String]::Concat("Script path: ", $itemin403.Script,"`r`n")
 
-                                if(Test-Path $LogPath){
-                                    Remove-Item -Path $LogPath
+                                    if(Test-Path $LogPath){
+                                        Remove-Item -Path $LogPath
+                                    }
+
+                                    Add-Content -Path $LogPath -Value $msg1
+                                    Add-Content -Path $LogPath -Value $msg2
+                                    Add-Content -Path $LogPath -Value $msg3
+                                    Add-Content -Path $LogPath -Value $msg4
+                                    Add-Content -Path $LogPath -Value $msg5
+
+                                    $duration = [System.String]::Concat($Duration.Hours, " hours ", $Duration.Minutes, " minutes ", $Duration.Seconds, " seconds")
+                                    $DataGridView_Logs.rows.Add($itemin403.ID, $itemin400.Date, $itemin403.Date, $duration, $itemin403.Script)
+                                    $counter += 1
+                                    $check = 1
                                 }
-
-                                Add-Content -Path $LogPath -Value $msg1
-                                Add-Content -Path $LogPath -Value $msg2
-                                Add-Content -Path $LogPath -Value $msg3
-                                Add-Content -Path $LogPath -Value $msg4
-                                Add-Content -Path $LogPath -Value $msg5
-
-                                $duration = [System.String]::Concat($Duration.Hours, " hours ", $Duration.Minutes, " minutes ", $Duration.Seconds, " seconds")
-                                $DataGridView_Logs.rows.Add($itemin403.ID, $itemin400.Date, $itemin403.Date, $duration, $itemin403.Script)
-                                $counter += 1
-                                $check = 1
                             }
+
+
+                       if ($check -eq 0)
+                        {
+                            $DataGridView_Logs.rows.Add($itemin400.ID, $itemin400.Date, "", "", $itemin400.Script)
+                            $counter2 += 1
                         }
 
-
-                   if ($check -eq 0)
-                    {
-                        $DataGridView_Logs.rows.Add($itemin400.ID, $itemin400.Date, "", "", $itemin400.Script)
-                        $counter2 += 1
                     }
 
-                }
+                $TextBox_Counter.Text = $counter
+                $TextBox_Counter2.Text = $counter2
 
-            $TextBox_Counter.Text = $counter
-            $TextBox_Counter2.Text = $counter2
-
-            if($DataGridView_Logs.RowCount -gt 0)
-            {
-                $Button_Search.Enabled = $true
-            }                           
-                if(Test-Path $LogPath){
-                    $TextBox_Logs.AppendText("`r`nMatched logs were saved to: $LogPath`r`n")
+                if($DataGridView_Logs.RowCount -gt 0)
+                {
+                    $Button_Search.Enabled = $true
+                }                           
+                    if(Test-Path $LogPath){
+                        $TextBox_Logs.AppendText("`r`nMatched logs were saved to: $LogPath`r`n")
+                    }
                 }
-            }
-        else{
-            [System.Windows.Forms.MessageBox]::Show("The path to $Event_log_file was not found.", "PowerShell Logs Timeliner Error!", 0)
-            }
+            else{
+                [System.Windows.Forms.MessageBox]::Show("The path to $Event_log_file was not found.", "PowerShell Logs Timeliner Error!", 0)
+                }
         }
-    
+        else
+        {
+            [System.Windows.Forms.MessageBox]::Show("The path to $cmd was not found. Please make sure that LogParser.exe is there.", "PowerShell Logs Timeliner Error!", 0)
+        }
+    }
+        
     catch
     {
         [System.Windows.Forms.MessageBox]::Show($_, "PowerShell Logs - Timeliner", 0)
@@ -560,4 +565,3 @@ $WindowsForm.Controls.Add($TextBox_Logs)
 $WindowsForm.Controls.Add($DataGridView_Logs)
 $WindowsForm.Controls.Add($menuMain)
 $WindowsForm.ShowDialog()
-
