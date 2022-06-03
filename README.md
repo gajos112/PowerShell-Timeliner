@@ -36,6 +36,7 @@ The tool first parses all events with ID 400 and 403 and saves the output to two
 Then it takes that two files and gathers basic information about script executions (event ID 400) and script terminations (event ID 403). It uses ScriptRunspaceId and script path two match these logs. If the ScriptRunspaceId and script path match, it puts that together and adds to a DataGridView to display that inforamtion in a very handy way, but it also writes it down to a file which will be named PowerShellLogs.txt.
 
 To get more information about a script you are interted in, you can click on the row containg it and the tool will display all extracted information: 
+
 ![alt text](https://github.com/gajos112/PowerShell-Timeliner/blob/main/images/7.PNG?raw=true)
 
 In addition to that, I implemented a small logging panel, which tell you how many entire were added to the Timeline and where the output was saved.
