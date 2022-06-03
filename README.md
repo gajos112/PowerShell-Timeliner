@@ -18,3 +18,9 @@ Inside the third file, you can find all process which were matched (script execu
 All three files are saved to the provided location:
 
 ![alt text](https://github.com/gajos112/PowerShell-Timeliner/blob/main/images/14.PNG?raw=true)
+
+# How does it work?
+
+Like it was said erlier, it is the GUI tool which looks like that:
+
+![alt text](https://github.com/gajos112/PowerShell-Timeliner/blob/main/images/6.png?raw=true)
