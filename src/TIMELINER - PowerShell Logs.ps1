@@ -203,15 +203,13 @@ function Parse{
                                     $msg4 = [System.String]::Concat("Duration: ", $Duration.Hours, " hours ", $Duration.Minutes, " minutes ", $Duration.Seconds, " seconds")
                                     $msg5 = [System.String]::Concat("Script path: ", $itemin403.Script,"`r`n")
 
-                                  
-
                                     Add-Content -Path $LogPath -Value $msg1
                                     Add-Content -Path $LogPath -Value $msg2
                                     Add-Content -Path $LogPath -Value $msg3
                                     Add-Content -Path $LogPath -Value $msg4
                                     Add-Content -Path $LogPath -Value $msg5
 
-                                    $duration = [System.String]::Concat($Duration.Hours, " hours ", $Duration.Minutes, " minutes ", $Duration.Seconds, " seconds")
+                                    $duration = [System.String]::Concat($Duration.Days, " days ",$Duration.Hours, " hours ", $Duration.Minutes, " minutes ", $Duration.Seconds, " seconds")
                                     $DataGridView_Logs.rows.Add($itemin403.ID, $itemin400.Date, $itemin403.Date, $duration, $itemin403.Script)
                                     $counter += 1
                                     $check = 1
