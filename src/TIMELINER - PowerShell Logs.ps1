@@ -82,7 +82,6 @@ function Parse{
 
             if (Test-Path $Event_log_file){
                 ### 403 ###
-
                 $TextBox_Logs.AppendText("Parsing PowerShell.evtx: (ID 403) using 'logParser.exe'...`r`n")
         
                 $OutputPathFileTmp = [System.String]::Concat($Output_Directory,"\Timeline_WinEvt_Powershell_403.tmp")
@@ -129,7 +128,6 @@ function Parse{
                 Remove-Item -Path $OutputPathFileTmp
 
                 ### 400 ###
-
                 $TextBox_Logs.AppendText("`r`nParsing PowerShell.evtx: (ID 400) using 'logParser.exe'...`r`n")
         
                 $OutputPathFileTmp = [System.String]::Concat($Output_Directory,"\Timeline_WinEvt_Powershell_400.tmp")
@@ -174,11 +172,16 @@ function Parse{
                 Remove-Item -Path $OutputPathFileTmp
 
                 ### ANALYSIS ###
-                $TextBox_Logs.AppendText("`r`nAnalyzing all logs...")
+                $TextBox_Logs.AppendText("`r`nAnalyzing all logs...`r`n")
 
                 $DataGridView_Logs.Enabled = $true
                 $DataGridView_Logs.rows.clear()
             
+                  if(Test-Path $LogPath){
+                      Remove-Item -Path $LogPath
+                      $TextBox_Logs.AppendText("The old PowerShell logs $LogPath were deleted.")
+                  }
+
                 $check = 0
                 $counter = 0
                 $counter2 = 0
@@ -200,9 +203,7 @@ function Parse{
                                     $msg4 = [System.String]::Concat("Duration: ", $Duration.Hours, " hours ", $Duration.Minutes, " minutes ", $Duration.Seconds, " seconds")
                                     $msg5 = [System.String]::Concat("Script path: ", $itemin403.Script,"`r`n")
 
-                                    if(Test-Path $LogPath){
-                                        Remove-Item -Path $LogPath
-                                    }
+                                  
 
                                     Add-Content -Path $LogPath -Value $msg1
                                     Add-Content -Path $LogPath -Value $msg2
