@@ -23,4 +23,4 @@ All three files are saved to the provided location:
 
 Like it was said erlier, it is the GUI tool which looks like that:
 
-![alt text](https://github.com/gajos112/PowerShell-Timeliner/blob/main/images/6.png?raw=true)
+![alt text](https://github.com/gajos112/PowerShell-Timeliner/blob/main/images/6_.png?raw=true)
