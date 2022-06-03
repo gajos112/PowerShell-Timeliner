@@ -23,7 +23,7 @@ All three files are saved to the provided location:
 
 Like it was said erlier, it is the GUI tool and looks like that:
 
-![alt text](https://github.com/gajos112/PowerShell-Timeliner/blob/main/images/6_.png?raw=true)
+![alt text](https://github.com/gajos112/PowerShell-Timeliner/blob/main/images/16.png?raw=true)
 
 First, you have to provide a path to the Windows PowerShell.evtx that you want to parse. Then you also have to provide the path where you want to save the output (timelines in TLN format and script executions) and click "PARSE".
 
