@@ -12,7 +12,9 @@ The tool generates three diffrent files. Two of them are CSV files and keep a TL
 - 403 (Engine state is changed from Available to Stopped)
 
 Inside the third file, you can find all process which were matched (script execution and script termination:
+
 ![alt text](https://github.com/gajos112/PowerShell-Timeliner/blob/main/images/15.PNG?raw=true)
 
 All thre files look like that:
+
 ![alt text](https://github.com/gajos112/PowerShell-Timeliner/blob/main/images/14.PNG?raw=true)
