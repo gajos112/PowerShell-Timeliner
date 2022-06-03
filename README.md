@@ -15,6 +15,6 @@ Inside the third file, you can find all process which were matched (script execu
 
 ![alt text](https://github.com/gajos112/PowerShell-Timeliner/blob/main/images/15.PNG?raw=true)
 
-All thre files look like that:
+All three files are saved to the provided location:
 
 ![alt text](https://github.com/gajos112/PowerShell-Timeliner/blob/main/images/14.PNG?raw=true)
