@@ -39,10 +39,15 @@ To get more information about a script you are interted in, you can click on the
 
 ![alt text](https://github.com/gajos112/PowerShell-Timeliner/blob/main/images/7.PNG?raw=true)
 
-In addition to that, I implemented a small logging panel, which tell you how many entire were added to the Timeline and where the output was saved.
+In addition to that, I implemented a small logging panel, which tells you how many entries were added to the Timeline and where the output was saved to.
 
 ![alt text](https://github.com/gajos112/PowerShell-Timeliner/blob/main/images/12.PNG?raw=true)
 
 ![alt text](https://github.com/gajos112/PowerShell-Timeliner/blob/main/images/13.PNG?raw=true)
 
+If you have many PowerShell script executions, you can search for a specififc path using a SEARCH box. 
+
+![alt text](https://github.com/gajos112/PowerShell-Timeliner/blob/main/images/8.PNG?raw=true)
+
+![alt text](https://github.com/gajos112/PowerShell-Timeliner/blob/main/images/9.PNG?raw=true)
 
